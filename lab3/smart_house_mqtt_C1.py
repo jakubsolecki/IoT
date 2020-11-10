@@ -28,8 +28,8 @@ def main():
 
     def button1_pressed():
         print("button1 pressed!")
-        led1.toggle()
-        # mqttc.publish("apart2137/light/living1", "TOGGLE", 0, False)
+        # led1.toggle()
+        mqttc.publish("apart2137/light/living_room", "TOGGLE", 0, False)
 
     def button2_pressed():
         print("button2 pressed!")
@@ -49,7 +49,7 @@ def main():
 
         # Subscribing in on_connect() means that if we lose the connection and
         # reconnect then subscriptions will be renewed.
-        mqttc.subscribe("apart2137/light/living1")
+        mqttc.subscribe("apart2137/light/living_room")
         mqttc.subscribe("apart2137/ZONE1/light")
         mqttc.subscribe("apart2137/ZONE2/light")
 

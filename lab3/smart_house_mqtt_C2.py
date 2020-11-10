@@ -28,8 +28,8 @@ def main():
 
     def button1_pressed():
         print("button1 pressed!")
-        led1.toggle()
-        # mqttc.publish("apart2137/light/kitchen", "TOGGLE", 0, False)
+        # led1.toggle()
+        mqttc.publish("apart2137/light/kitchen", "TOGGLE", 0, False)
 
     def button2_pressed():
         print("button2 pressed!")

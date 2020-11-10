@@ -28,13 +28,13 @@ def main():
 
     def button1_pressed():
         print("button1 pressed!")
-        led1.toggle()
-        # mqttc.publish("apart2137/light/bedroom", "TOGGLE", 0, False)
+        # led1.toggle()
+        mqttc.publish("apart2137/light/bedroom_light1", "TOGGLE", 0, False)
 
     def button2_pressed():
         print("button2 pressed!")
-        led2.toggle()
-        # mqttc.publish("apart2137/light/bedroom", "TOGGLE", 0, False)
+        # led2.toggle()
+        mqttc.publish("apart2137/light/bedroom_light2", "TOGGLE", 0, False)
 
     led1 = LED(21)
     led2 = LED(22)
@@ -51,15 +51,18 @@ def main():
 
         # Subscribing in on_connect() means that if we lose the connection and
         # reconnect then subscriptions will be renewed.
-        mqttc.subscribe("apart2137/light/bedroom")
+        mqttc.subscribe("apart2137/light/bedroom_light1")
+        mqttc.subscribe("apart2137/light/bedroom_light2")
         mqttc.subscribe("apart2137/ZONE2/light")
 
     # The callback for when a PUBLISH message is received from the server.
     def on_message(client, userdata, msg):
         print(msg.topic + " " + str(msg.payload))
         if msg.payload == b'TOGGLE':
-            led1.toggle()
-            led1.toggle()
+            if msg.topic == "apart2137/light/bedroom_light1":
+                led1.toggle()
+            elif msg.topic == "apart2137/light/bedroom_light2":
+                led2.toggle()
         elif msg.payload == b'OFF':
             led1.off()
             led2.off()
