@@ -54,6 +54,7 @@ def main():
         mqttc.subscribe("apart2137/light/bedroom_light1")
         mqttc.subscribe("apart2137/light/bedroom_light2")
         mqttc.subscribe("apart2137/ZONE2/light")
+        mqttc.publish("apart2137/service", "C3 on and working properly", 0, False)
 
     # The callback for when a PUBLISH message is received from the server.
     def on_message(client, userdata, msg):
@@ -74,6 +75,7 @@ def main():
     mqttc = mqtt.Client("apart2137_C3")
     mqttc.on_message = on_message
     mqttc.on_connect = on_connect
+    mqttc.will_set("apart2137", payload="C3 stopped working", qos=0, retain=True)
 
     mqttc.connect("test.mosquitto.org", 1883, 60)
 

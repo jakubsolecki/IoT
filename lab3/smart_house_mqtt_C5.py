@@ -29,12 +29,12 @@ def main():
     def button1_pressed():
         print("button1 pressed!")
         # led1.toggle()
-        mqttc.publish("apart2137/light/bedroom_light1", "TOGGLE", 0, False)
+        mqttc.publish("apart2137/light/bathroom_light1", "TOGGLE", 0, False)
 
     def button2_pressed():
         print("button2 pressed!")
         # led2.toggle()
-        mqttc.publish("apart2137/light/bathroom_light2", "OFF", 0, False)
+        mqttc.publish("apart2137/light/bathroom_light2", "TOGGLE", 0, False)
 
     led1 = LED(21)
     led2 = LED(22)
@@ -54,6 +54,7 @@ def main():
         mqttc.subscribe("apart2137/ZONE2/light")
         mqttc.subscribe("apart2137/light/bathroom_light1")
         mqttc.subscribe("apart2137/light/bathroom_light2")
+        mqttc.publish("apart2137/service", "C5 on and working properly", 0, False)
 
     # The callback for when a PUBLISH message is received from the server.
     def on_message(client, userdata, msg):
@@ -63,7 +64,7 @@ def main():
                 led1.toggle()
             elif msg.topic == "apart2137/light/bathroom_light2":
                 led2.toggle()
-        elif msg.payload == b'OFF':
+        elif msg.topic == "apart2137/ZONE2/light":
             led1.off()
             led2.off()
 
@@ -74,6 +75,7 @@ def main():
     mqttc = mqtt.Client("apart2137_C5")
     mqttc.on_message = on_message
     mqttc.on_connect = on_connect
+    mqttc.will_set("apart2137", payload="C5 stopped working", qos=0, retain=True)
 
     mqttc.connect("test.mosquitto.org", 1883, 60)
 

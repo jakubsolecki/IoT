@@ -52,11 +52,12 @@ def main():
         mqttc.subscribe("apart2137/light/living_room")
         mqttc.subscribe("apart2137/ZONE1/light")
         mqttc.subscribe("apart2137/ZONE2/light")
+        mqttc.publish("apart2137/service", "C1 on and working properly", 0, False)
 
     # The callback for when a PUBLISH message is received from the server.
     def on_message(client, userdata, msg):
         print(msg.topic + " " + str(msg.payload))
-        if msg.payload == b'TOGGLE':
+        if msg.topic == "apart2137/light/living_room" and msg.payload == b'TOGGLE':
             led1.toggle()
         elif msg.payload == b'OFF':
             led1.off()
@@ -68,6 +69,7 @@ def main():
     mqttc = mqtt.Client("apart2137_C1")
     mqttc.on_message = on_message
     mqttc.on_connect = on_connect
+    mqttc.will_set("apart2137", payload="C1 stopped working", qos=0, retain=True)
 
     mqttc.connect("test.mosquitto.org", 1883, 60)
 
